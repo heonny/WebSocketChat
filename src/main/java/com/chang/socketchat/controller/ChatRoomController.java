@@ -4,6 +4,7 @@ import com.chang.socketchat.dto.ChatRoom;
 import com.chang.socketchat.repository.ChatRoomRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,16 @@ public class ChatRoomController {
     @ResponseBody
     public ChatRoom createRoom(@RequestParam String name) {
         return chatRoomRepository.createChatRoom(name);
+    }
+
+    @PostMapping("/room/remove")
+    @ResponseBody
+    public HttpStatus removeRoom(@RequestParam String roomId) {
+        if(chatRoomRepository.findRoomById(roomId) == null) {
+            return HttpStatus.NOT_FOUND;
+        }
+        chatRoomRepository.removeChatRoom(roomId);
+        return HttpStatus.OK;
     }
 
     @GetMapping("/room/enter/{roomId}")

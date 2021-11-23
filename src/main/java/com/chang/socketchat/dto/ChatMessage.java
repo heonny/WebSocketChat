@@ -13,6 +13,6 @@ public class ChatMessage {
     private String message; // 메시지
     // 메시지 타입 : 입장, 채팅
     public enum MessageType {
-        ENTER, TALK
+        ENTER, TALK, ACTION
     }
 }

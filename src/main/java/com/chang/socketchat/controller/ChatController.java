@@ -1,6 +1,7 @@
 package com.chang.socketchat.controller;
 
 import com.chang.socketchat.dto.ChatMessage;
+import com.chang.socketchat.dto.ChatMessage.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -24,5 +25,13 @@ public class ChatController {
             message.setMessage(message.getSender() + ENTER_MSG);
         }
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+    }
+
+    @MessageMapping("/chat/action")
+    public void action(ChatMessage message) {
+        log.debug("[ACTION]" + message.getSender() + ": " + message.getMessage());
+        if (MessageType.ACTION.equals(message.getType())) {
+            messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+        }
     }
 }

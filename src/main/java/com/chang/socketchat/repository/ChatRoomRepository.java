@@ -7,8 +7,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 public class ChatRoomRepository {
 
@@ -21,7 +23,7 @@ public class ChatRoomRepository {
 
     public List<ChatRoom> findAllRoom() {
         // 채팅방 생성순서 최근 순으로 반환
-        List chatRooms = new ArrayList<>(chatRoomMap.values());
+        List<ChatRoom> chatRooms = new ArrayList<>(chatRoomMap.values());
         Collections.reverse(chatRooms);
         return chatRooms;
     }
@@ -34,5 +36,10 @@ public class ChatRoomRepository {
         ChatRoom chatRoom = ChatRoom.create(name);
         chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
         return chatRoom;
+    }
+
+    public void removeChatRoom(String roomId) {
+        log.debug("[REMOVE CHAT ROOM] " + roomId);
+        chatRoomMap.remove(roomId);
     }
 }
