@@ -21,14 +21,22 @@ public class CORSFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
+
+        String remoteAddr = request.getRemoteAddr();
+        if (remoteAddr.equals("0:0:0:0:0:0:0:1")) {
+            remoteAddr = "localhost";
+        }
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-//        httpServletResponse.addHeader("Access-Control-Allow-Origin", "http://localhost:9998");
-        httpServletResponse.addHeader("Access-Control-Allow-Origin", "http://192.168.0.15:9998");
-//        httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-        httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", "*");
-        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+        httpServletResponse
+            .setHeader("Access-Control-Allow-Origin", "http://" + remoteAddr + ":9998");
+        httpServletResponse
+            .setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        httpServletResponse
+            .setHeader("Access-Control-Max-Age", "3600");
+        httpServletResponse
+            .setHeader("Access-Control-Allow-Headers", "*");
+        httpServletResponse
+            .setHeader("Access-Control-Allow-Credentials", "true");
         chain.doFilter(request, response);
     }
 
